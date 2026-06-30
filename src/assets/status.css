@@ -1,0 +1,97 @@
+/* Theme-specific styles using DaisyUI variables */
+[data-theme="light"] {
+    --bg-base: var(--color-base-100);
+    --text-base: var(--color-base-content);
+    --bg-table-header: var(--color-primary);
+    --text-table-header: var(--color-primary-content);
+    --bg-hover: var(--color-base-200);
+}
+
+[data-theme="dark"] {
+    --bg-base: var(--color-base-100);
+    --text-base: var(--color-base-content);
+    --bg-table-header: var(--color-primary);
+    --text-table-header: var(--color-primary-content);
+    --bg-hover: var(--color-base-200);
+}
+
+/* Status badge colors using DaisyUI theme colors */
+.status-badge-อนุมัติ { 
+    background-color: var(--color-success) !important; 
+    color: var(--color-success-content) !important; 
+}
+.status-badge-ปฏิเสธ { 
+    background-color: var(--color-error) !important; 
+    color: var(--color-error-content) !important; 
+}
+.status-badge-รออนุมัติ { 
+    background-color: var(--color-warning) !important; 
+    color: var(--color-warning-content) !important; 
+}
+.status-badge-ยกเลิกแล้ว { 
+    background-color: var(--color-neutral) !important; 
+    color: var(--color-neutral-content) !important; 
+}
+
+/* Table styles */
+.table-container {
+    background-color: var(--bg-base);
+    color: var(--text-base);
+}
+
+.table-header {
+    background-color: var(--bg-table-header);
+    color: var(--text-table-header);
+}
+
+.table-row:hover {
+    background-color: var(--bg-hover);
+}
+
+/* Button styles */
+.action-button {
+    transition: all 0.3s ease;
+}
+
+.action-button:hover {
+    transform: scale(1.05);
+}
+
+/* Modal styles */
+.modal {
+    background-color: var(--bg-base);
+    color: var(--text-base);
+}
+
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.3);
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(156, 163, 175, 0.5);
+}
+
+textarea.custom-scrollbar {
+    cursor: default;
+    outline: none;
+}
+
+textarea.custom-scrollbar:focus {
+    outline: none;
+    border-color: rgba(156, 163, 175, 0.2);
+} 

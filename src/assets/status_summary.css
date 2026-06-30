@@ -1,0 +1,56 @@
+/* status_summary.css — Clean & Minimalist Version */
+
+/* ===== Card Base ===== */
+.summary-card {
+    border-radius: 1rem;
+    border: 1px solid var(--color-base-200);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    overflow: hidden;
+    background-color: var(--color-base-100);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.summary-card:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* ===== Chart container ===== */
+.chart-container {
+    height: 20rem;
+    min-height: 320px;
+    width: 100%;
+}
+@media (max-width: 1024px) { .chart-container { height: 18rem; } }
+@media (max-width: 640px)  { .chart-container { height: 16rem; } }
+
+/* ===== Scroll area ===== */
+.scroll-area {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    padding-right: 0.5rem;
+}
+.scroll-area::-webkit-scrollbar { width: 6px; }
+.scroll-area::-webkit-scrollbar-track { background: transparent; }
+.scroll-area::-webkit-scrollbar-thumb {
+    background: var(--color-base-300);
+    border-radius: 10px;
+}
+.scroll-area::-webkit-scrollbar-thumb:hover {
+    background: var(--color-base-content);
+    opacity: 0.5;
+}
+
+/* ===== Status Indicator Pulse ===== */
+@keyframes status-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(54, 211, 153, 0.7); }
+    70% { box-shadow: 0 0 0 6px rgba(54, 211, 153, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(54, 211, 153, 0); }
+}
+.status-indicator {
+    animation: status-pulse 2s infinite;
+}
+
+/* Make canvas feel integrated */
+canvas {
+    max-width: 100%;
+}

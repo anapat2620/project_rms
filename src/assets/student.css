@@ -1,0 +1,56 @@
+/* Animations for Next (fade out left / fade in right) */
+@keyframes fadeOutLeft {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(-50px); }
+}
+@keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+/* Animations for Prev (fade out right / fade in left) */
+@keyframes fadeOutRight {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(50px); }
+}
+@keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.fade-out-left {
+    animation: fadeOutLeft 0.5s forwards;
+}
+.fade-in-right {
+    animation: fadeInRight 0.5s forwards;
+}
+.fade-out-right {
+    animation: fadeOutRight 0.5s forwards;
+}
+.fade-in-left {
+    animation: fadeInLeft 0.5s forwards;
+}
+/* Custom styles for progress bar steps */
+.step.active {
+    color: #2563eb; /* blue-600 */
+    font-weight: 600;
+}
+/* Style for highlighting required fields that are empty */
+input.border-red-500,
+textarea.border-red-500 {
+    border-color: #ef4444; /* red-500 */
+}
+/* Style for highlighting parent container of checkbox groups if none are selected */
+.checkbox-group-container.border-red-500,
+.radio-group-container.border-red-500 {
+    border: 1px solid #ef4444; /* red-500 */
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease-in-out; /* Add transition for better visual effect */
+}
+.error-message {
+    color: #ef4444; /* red-500 */
+    font-size: 0.875rem; /* text-sm */
+    margin-top: 0.25rem;
+}
+.hidden {
+    display: none !important;
+} 

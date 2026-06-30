@@ -1,0 +1,65 @@
+/* get_my_scholarships.css - Optimized for index window loading */
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    display: inline-block;
+    transition: opacity 0.2s ease;
+}
+
+/* Status badge colors - Light theme */
+.status-รออนุมัติ { 
+    background-color: #fef3c7; 
+    color: #92400e; 
+}
+
+.status-อนุมัติ { 
+    background-color: #d1fae5; 
+    color: #065f46; 
+}
+
+.status-ปฏิเสธ { 
+    background-color: #fee2e2; 
+    color: #991b1b; 
+}
+
+.status-ยกเลิกแล้ว { 
+    background-color: #f3f4f6; 
+    color: #374151; 
+}
+
+/* Status badge colors - Dark theme */
+[data-theme="dark"] .status-รออนุมัติ { 
+    background-color: rgba(251, 191, 36, 0.2); 
+    color: #fbbf24; 
+}
+
+[data-theme="dark"] .status-อนุมัติ { 
+    background-color: rgba(34, 197, 94, 0.2); 
+    color: #4ade80; 
+}
+
+[data-theme="dark"] .status-ปฏิเสธ { 
+    background-color: rgba(239, 68, 68, 0.2); 
+    color: #f87171; 
+}
+
+[data-theme="dark"] .status-ยกเลิกแล้ว { 
+    background-color: rgba(107, 114, 128, 0.2); 
+    color: #9ca3af; 
+}
+
+/* Ensure proper spacing when loaded in index window */
+.container {
+    max-width: 100%;
+    padding: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+} 

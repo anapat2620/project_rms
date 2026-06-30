@@ -1,0 +1,49 @@
+/* approve_requests.css - Optimized for index window loading */
+body { 
+    font-family: 'Kanit', sans-serif; 
+}
+
+/* Ensure modals work correctly when loaded dynamically */
+.modal {
+    z-index: 9999;
+}
+
+.modal-box {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Table responsive improvements */
+.table {
+    width: 100%;
+    table-layout: auto;
+}
+
+@media (max-width: 768px) {
+    .table {
+        font-size: 0.875rem;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.5rem;
+    }
+}
+
+/* Button spacing improvements */
+.btn-xs {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+/* Form improvements */
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Loading state for buttons */
+button[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+} 

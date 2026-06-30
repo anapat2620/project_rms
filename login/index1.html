@@ -6,28 +6,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSU Research Management System</title>
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: Arial, sans-serif;
-            background: url('../Photo/LoginPage.png') no-repeat center center fixed;
+            min-height: 100vh;
+            min-width: 100vw;
+            overflow: hidden;
+            background: url('../Photo/LoginNew.png') no-repeat center center fixed;
             background-size: cover;
-            margin: 0;
-            height: 100vh;
+        }
+        .main-content {
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
-            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
         }
+
+        /* --- ส่วนของปุ่มที่ปรับแก้ใหม่ --- */
+        .fixed-action-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 50;
+        }
+
+        /* ปรับจากปุ่มสลับธีม เป็นปุ่มลิงก์วงกลมสีทอง */
+        .nav-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 54px;
+            height: 54px;
+            background: linear-gradient(135deg, #ffd000, #ffb700);
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: #333;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: scale(1.1) rotate(5deg);
+            background: linear-gradient(135deg, #ffb700, #ffd000);
+            box-shadow: 0 6px 20px rgba(255, 208, 0, 0.4);
+        }
+
+        .nav-button svg {
+            width: 26px;
+            height: 26px;
+        }
+        /* ---------------------------- */
 
         .form-container {
             display: flex;
             align-items: center;
             gap: 20px;
-            background: rgba(255, 255, 255, 0.5);
-            padding: 15px 25px;
-            border-radius: 50px;
-            margin-bottom: 120px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.92);
+            padding: 22px 32px;
+            border-radius: 32px;
+            margin-bottom: 0;
+            box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.13);
+            border: 1.5px solid #ffe082;
+            position: fixed;
+            left: 50%;
+            bottom: 40px;
+            transform: translateX(-50%);
+            z-index: 20;
         }
 
         input, select {
@@ -52,7 +106,7 @@
         }
 
         .submit-btn {
-            padding: 12px 30px;
+            padding: 13px 34px;
             background: linear-gradient(90deg, #ffd000, #ffb700);
             border: none;
             border-radius: 25px;
@@ -61,58 +115,217 @@
             cursor: pointer;
             transition: 0.3s;
             color: #333;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.18);
+            margin-left: 8px;
         }
 
         .submit-btn:hover {
             background: linear-gradient(90deg, #ffb700, #ffd000);
+            box-shadow: 0px 6px 18px #ffe082;
+        }
+
+        .news-board {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 24px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            padding: 20px 28px 16px 28px;
+            max-width: 420px;
+            width: 90vw;
+            text-align: left;
+            color: #222;
+            border: 2.5px solid #ffd000;
+            position: absolute;
+            top: 32px;
+            left: 32px;
+            z-index: 10;
+            backdrop-filter: blur(4px);
+        }
+
+        .news-board h2 {
+            margin: 0;
+            font-size: 1.22rem;
+            font-weight: bold;
+            color: #d97706;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .news-board h2::before {
+            content: '📰';
+            font-size: 1.2em;
+        }
+
+        .news-board-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .toggle-btn {
+            background: #fffbe8;
+            border: 1.5px solid #ffd700;
+            border-radius: 50%;
+            width: 2.1rem;
+            height: 2.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.25rem;
+            color: #d97706;
+            transition: background 0.18s, box-shadow 0.18s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            outline: none;
+        }
+
+        .toggle-btn:hover {
+            background: #ffe082;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+
+        .news-board-divider {
+            border-bottom: 1px solid #ffe082;
+            margin: 0.2rem 0 0.7rem 0;
+        }
+
+        .news-board ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .news-board li {
+            margin-bottom: 7px;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            padding-left: 2px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .news-board {
+                padding: 12px 4vw 8px 4vw;
+                font-size: 0.98rem;
+                max-width: 98vw;
+                margin: 16px auto 24px auto;
+            }
+            .form-container {
+                flex-direction: column;
+                gap: 12px;
+                padding: 16px 8px;
+                border-radius: 18px;
+                margin-bottom: 18px;
+            }
+            .form-container input, .form-container select {
+                width: 90vw;
+            }
+            .submit-btn {
+                width: 100%;
+                margin-left: 0;
+            }
         }
     </style>
 </head>
 
 <body>
+    <div class="fixed-action-container">
+        <a href="../src/status_summary.php" class="nav-button" title="ไปยังหน้า status summary">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 3v18h18M9 17V9m4 8V5m4 12v-6" />
+            </svg>
+        </a>
+    </div>
 
-    <form class="form-container" id="loginForm">
-        <input type="text" id="email" name="email" placeholder="E-mail" required>
-        <input type="password" id="password" name="password" placeholder="Password" required>
-        
-        <!-- เปลี่ยน input type="text" เป็น select -->
-        <select id="position" name="position" required>
-            <option value="" disabled selected>เลือกตำแหน่ง</option>
-            <option value="ปริญญาตรี">ปริญญาตรี </option>
-            <option value="ปริญญาโท">ปริญญาโท</option>
-            <option value="เปริญญาเอก">ปริญญาเอก</option>
-            <option value="บุคลากรวิชาการ">บุคลากรวิชาการ</option>
-            <option value="อธิการบดี">อธิการบดี</option>
-            <option value="รองอธิการบดี">รองอธิการบดี</option>
-            <option value="ผู้ช่วยอธิการบดี">ผู้ช่วยอธิการบดี</option>
-        </select>
+    <div class="main-content">
+        <div class="news-board" id="newsBoard">
+            <div class="news-board-header">
+                <h2>กระดานข่าวสาร</h2>
+                <button id="toggleNewsBtn" aria-label="ย่อ/ขยายข่าวสาร" class="toggle-btn">
+                    <span id="toggleIcon">&#x25B2;</span>
+                </button>
+            </div>
+            <div class="news-board-divider"></div>
+            <ul id="newsList" style="margin-top:10px;">
+                <li class="loading">กำลังโหลดข่าวสาร...</li>
+            </ul>
+        </div>
 
-        <input type="submit" class="submit-btn" value="Login">
-    </form>
+        <form class="form-container" id="loginForm">
+            <input type="text" id="email" name="email" placeholder="E-mail" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <input type="submit" class="submit-btn" value="Login">
+        </form>
+    </div>
 
     <script>
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // ป้องกันการโหลดหน้าใหม่
+        // โหลดข่าวสารจากฐานข้อมูล
+        function loadNews() {
+            fetch('../src/get_news.php')
+                .then(response => response.json())
+                .then(data => {
+                    const newsList = document.getElementById('newsList');
+                    if (!data || data.length === 0) {
+                        newsList.innerHTML = '<li>ไม่มีข่าวสารในขณะนี้</li>';
+                        return;
+                    }
+                    let newsHtml = '';
+                    data.forEach(news => {
+                        newsHtml += `<li><strong>${news.date}:</strong> ${news.content}</li>`;
+                    });
+                    newsList.innerHTML = newsHtml;
+                })
+                .catch(error => {
+                    console.error('Error loading news:', error);
+                    document.getElementById('newsList').innerHTML = '<li>ไม่สามารถโหลดข่าวสารได้</li>';
+                });
+        }
 
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNews();
+        });
+
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
             let formData = new FormData(this);
 
             fetch("logindb1.php", {
                 method: "POST",
                 body: formData
             })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                if (data.trim() === "success") {
-                    window.location.href = '../src/index.php'; // ไปหน้าหลัก
+                if (data.status === "success") {
+                    window.location.href = data.redirect_url || (data.is_admin ? '../src/admin_dashboard.php' : '../src/index.php');
                 } else {
-                    alert("ข้อมูลผู้ใช้หรือรหัสผ่านไม่ถูกต้อง โปรดตรวจสอบ.");
+                    alert(data.message || "ข้อมูลผู้ใช้หรือรหัสผ่านไม่ถูกต้อง โปรดตรวจสอบ.");
                 }
             })
-            .catch(error => console.error("Error:", error));
+            .catch(error => {
+                console.error("Error:", error);
+                alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง");
+            });
+        });
+
+        const toggleBtn = document.getElementById('toggleNewsBtn');
+        const newsListDiv = document.getElementById('newsList');
+        const toggleIcon = document.getElementById('toggleIcon');
+        toggleBtn.addEventListener('click', function() {
+            if (newsListDiv.style.display === 'none') {
+                newsListDiv.style.display = '';
+                toggleIcon.innerHTML = '&#x25B2;';
+            } else {
+                newsListDiv.style.display = 'none';
+                toggleIcon.innerHTML = '&#x25BC;';
+            }
         });
     </script>
-
 </body>
-
 </html>
