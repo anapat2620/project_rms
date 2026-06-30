@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าแรก</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Prompt', sans-serif;
+            overflow: hidden; /* ป้องกันการเลื่อน */
+        }
+
+        /* พื้นหลังเต็มจอและไม่เลื่อน */
+        body {
+            background: url('Photo/MainPage.png') no-repeat top center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            flex-direction: column;
+        }
+
+        /* ขยายขนาดตัวอักษรและเพิ่มเงา */
+        h1 {
+            font-size: 3.2rem; /* ขยายขนาดตัวอักษร */
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        /* ปุ่ม */
+        .button {
+            display: inline-block;
+            background: #FFB81C;
+            color: black;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background: #e0a800;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 15px;
+            font-size: 0.9rem;
+            color: rgb(251, 255, 0);
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <h1>ขอต้อนรับสู่หน้าหลักของ<br>มหาวิทยาลัยมหาสารคาม</h1>
+    <a href="login/index1.html" class="button">เข้าสู่ระบบ</a>
+
+    <footer>© 2025 มหาวิทยาลัยมหาสารคาม | <a href="#" style="color: white; text-decoration: underline;">นโยบายความเป็นส่วนตัว</a></footer>
+</body>
+</html>

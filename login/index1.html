@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSU Research Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('../Photo/LoginPage.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .form-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 15px 25px;
+            border-radius: 50px;
+            margin-bottom: 120px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        input, select {
+            width: 180px;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background-color: #fff;
+            text-align: center;
+            font-size: 16px;
+            color: #666;
+            outline: none;
+            font-weight: bold;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        input::placeholder {
+            color: #aaa;
+        }
+
+        .submit-btn {
+            padding: 12px 30px;
+            background: linear-gradient(90deg, #ffd000, #ffb700);
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #333;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(90deg, #ffb700, #ffd000);
+        }
+    </style>
+</head>
+
+<body>
+
+    <form class="form-container" id="loginForm">
+        <input type="text" id="email" name="email" placeholder="E-mail" required>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+        
+        <!-- เปลี่ยน input type="text" เป็น select -->
+        <select id="position" name="position" required>
+            <option value="" disabled selected>เลือกตำแหน่ง</option>
+            <option value="ปริญญาตรี">ปริญญาตรี </option>
+            <option value="ปริญญาโท">ปริญญาโท</option>
+            <option value="เปริญญาเอก">ปริญญาเอก</option>
+            <option value="บุคลากรวิชาการ">บุคลากรวิชาการ</option>
+            <option value="อธิการบดี">อธิการบดี</option>
+            <option value="รองอธิการบดี">รองอธิการบดี</option>
+            <option value="ผู้ช่วยอธิการบดี">ผู้ช่วยอธิการบดี</option>
+        </select>
+
+        <input type="submit" class="submit-btn" value="Login">
+    </form>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // ป้องกันการโหลดหน้าใหม่
+
+            let formData = new FormData(this);
+
+            fetch("logindb1.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.trim() === "success") {
+                    window.location.href = '../src/index.php'; // ไปหน้าหลัก
+                } else {
+                    alert("ข้อมูลผู้ใช้หรือรหัสผ่านไม่ถูกต้อง โปรดตรวจสอบ.");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+
+</body>
+
+</html>

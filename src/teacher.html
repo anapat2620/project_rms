@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>แบบฟอร์มขอรับทุนอุดหนุนฯ (อาจารย์)</title>
+</head>
+<body>
+
+  <!-- Container -->
+  <div class="max-w-5xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+    
+    <!-- Title & Breadcrumbs -->
+    <h2 class="text-3xl font-bold text-center mb-2">
+      แบบเสนอขอรับทุนอุดหนุนและส่งเสริมการวิจัยของอาจารย์
+    </h2>
+    <p class="text-center text-gray-600 mb-4">
+      ประเภทส่งเสริมการตีพิมพ์ในวารสารระดับนานาชาติ (Fast Track) ประจำปีงบประมาณ พ.ศ. 2568
+    </p>
+    <!-- Breadcrumbs -->
+    <div class="flex items-center justify-between mb-6">
+      <div class="step active text-blue-600 font-semibold">1. ข้อมูลทั่วไป</div>
+      <div class="w-1/5 h-1 bg-gray-300 rounded-full"></div>
+      <div class="step text-gray-500">2. หัวหน้าโครงการ</div>
+      <div class="w-1/5 h-1 bg-gray-300 rounded-full"></div>
+      <div class="step text-gray-500">3. ประเภท & Goals</div>
+      <div class="w-1/5 h-1 bg-gray-300 rounded-full"></div>
+      <div class="step text-gray-500">4. จริยธรรม & ความสำคัญ</div>
+      <div class="w-1/5 h-1 bg-gray-300 rounded-full"></div>
+      <div class="step text-gray-500">5. ทบทวน & ขั้นตอน</div>
+      <div class="w-1/5 h-1 bg-gray-300 rounded-full"></div>
+      <div class="step text-gray-500">6. เป้าหมาย & งบประมาณ</div>
+    </div>
+    <!-- Progress Bar -->
+    <div class="w-full bg-gray-200 h-2 rounded-lg mb-6">
+      <div id="progress-bar" class="bg-blue-500 h-2 rounded-lg" style="width: 16.6%;"></div>
+    </div>
+
+    <!-- Multi-step Form -->
+    <form id="multi-step-form" class="space-y-8">
+
+      <!-- STEP 1: ข้อมูลทั่วไป -->
+      <div class="form-step active">
+        <h3 class="text-xl font-bold mb-4">1. ข้อมูลทั่วไป</h3>
+        <div class="mb-4">
+          <label class="block text-gray-700 font-medium">ชื่อโครงการวิจัย (ภาษาไทย)</label>
+          <input
+            type="text"
+            placeholder="ชื่อโครงการวิจัย (ภาษาไทย)"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 font-medium">ชื่อโครงการวิจัย (ภาษาอังกฤษ)</label>
+          <input
+            type="text"
+            placeholder="ชื่อโครงการวิจัย (ภาษาอังกฤษ)"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div class="flex justify-end">
+            <button
+            type="button"
+            class="next-step bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all"
+            >
+            ถัดไป
+        </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: หัวหน้าโครงการวิจัย / ผู้ช่วยวิจัย -->
+      <div class="form-step hidden">
+        <h3 class="text-xl font-bold mb-4">2. หัวหน้าโครงการวิจัย / ผู้ช่วยวิจัย</h3>
+        
+        <!-- 2.1.1 อาจารย์ผู้รับทุน -->
+        <h4 class="text-lg font-semibold text-gray-800 mb-2">2.1.1 อาจารย์ผู้รับทุน (หัวหน้าโครงการ)</h4>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-gray-700 font-medium">ชื่อ (นาย/นาง/นางสาว)</label>
+            <input
+              type="text"
+              placeholder="ชื่อ"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium">ตำแหน่งทางวิชาการ</label>
+            <input
+              type="text"
+              placeholder="ตำแหน่งทางวิชาการ"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-gray-700 font-medium">สังกัดภาควิชา/สาขา</label>
+            <input
+              type="text"
+              placeholder="สังกัดภาควิชา/สาขา"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium">คณะ/หน่วยงาน</label>
+            <input
+              type="text"
+              placeholder="คณะ/หน่วยงาน"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-gray-700 font-medium">โทรศัพท์มือถือ</label>
+            <input
+              type="text"
+              placeholder="โทรศัพท์มือถือ"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium">E-mail</label>
+            <input
+              type="email"
+              placeholder="E-mail"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 font-medium">สัดส่วนการทำงานวิจัย (%)</label>
+          <input
+            type="number"
+            placeholder="%"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 font-medium">สาขาวิจัยที่ชำนาญ</label>
+          <input
+            type="text"
+            placeholder="สาขาวิจัยที่ชำนาญ"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- 2.1.2 ประวัติการศึกษา -->
+        <h4 class="text-lg font-semibold text-gray-800 mb-2">2.1.2 ประวัติการศึกษา</h4>
+        <p class="text-gray-600 mb-2">ระบุระดับการศึกษา, ปีที่จบ, สาขา, สถาบัน, ประเทศที่จบ</p>
+        <textarea
+          rows="3"
+          placeholder="ตัวอย่าง: ป.ตรี (ปี 2550) วิศวกรรมศาสตร์ ม.ขอนแก่น ประเทศไทย"
+          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-4"
+        ></textarea>
+
+        <!-- 2.1.3 ผลงานวิจัยที่ตีพิมพ์ -->
+        <h4 class="text-lg font-semibold text-gray-800 mb-2">
+          2.1.3 ผลงานวิจัยที่ตีพิมพ์ในวารสารนานาชาติ (ปี ค.ศ. 2019 – ปัจจุบัน)
+        </h4>
+        <textarea
+          rows="3"
+          placeholder="ระบุชื่อเจ้าของผลงาน, ชื่อเรื่อง, ชื่อวารสาร, Issue/Vol./No., Impact Factor, ฐานข้อมูล"
+          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-4"
+        ></textarea>
+
+        <!-- 2.2 ผู้ร่วมวิจัย (ถ้ามี) -->
+        <h4 class="text-lg font-semibold text-gray-800 mb-2">2.2 ผู้ร่วมวิจัย (ถ้ามี)</h4>
+        <textarea
+          rows="2"
+          placeholder="ชื่อ, สังกัด, โทรศัพท์, E-mail, สัดส่วนการทำงานวิจัย ฯลฯ"
+          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-4"
+        ></textarea>
+
+        <!-- 2.3 นิสิตผู้ร่วมวิจัย (ถ้ามี) -->
+        <h4 class="text-lg font-semibold text-gray-800 mb-2">2.3 นิสิตผู้ร่วมวิจัย (ถ้ามี)</h4>
+        <textarea
+          rows="2"
+          placeholder="ชื่อ, ระดับปริญญา, รหัสนิสิต, สังกัด, โทรศัพท์, E-mail, สัดส่วนการทำงานวิจัย ฯลฯ"
+          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+        ></textarea>
+
+        <div class="flex justify-between mt-6">
+          <button
+            type="button"
+            class="prev-step bg-gray-400 text-white px-6 py-3 rounded-lg hover:bg-gray-500 transition-all"
+          >
+            ย้อนกลับ
+          </button>
+          <button
+            type="button"
+            class="next-step bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all"
+          >
+            ถัดไป
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: ประเภทงานวิจัย, เป้าหมายประเด็นการวิจัย (MSU Goals) -->
+      <div class="form-step hidden">
+        <h3 class="text-xl font-bold mb-4">3. ประเภทของงานวิจัย & เป้าหมาย (MSU Goals)</h3>
+
+        <!-- ประเภทของงานวิจัย -->
+        <div class="mb-6">
+          <p class="text-lg font-semibold text-gray-800 mb-2">ประเภทของงานวิจัย</p>
+          <div class="space-y-2">
+            <label class="inline-flex items-center">
+              <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" value="พื้นฐาน" />
+              <span class="ml-2 text-gray-700">การวิจัยพื้นฐาน</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" value="ประยุกต์" />
+              <span class="ml-2 text-gray-700">การวิจัยประยุกต์</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" value="ทดลอง" />
+              <span class="ml-2 text-gray-700">การพัฒนาทดลอง</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- เป้าหมายประเด็นการวิจัย (MSU Goals) -->
+        <div class="mb-6">
+          <p class="text-lg font-semibold text-gray-800 mb-2">เป้าหมายประเด็นการวิจัย (MSU Goals)</p>
+          <div class="space-y-2">
+            <label class="inline-flex items-center">
+              <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" value="Goals 1" />
+              <span class="ml-2 text-gray-700">Goals 1</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" value="Goals 2" />
+              <span class="ml-2 text-gray-700">Goals 2</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" value="Goals 3" />
+              <span class="ml-2 text-gray-700">Goals 3</span>
+            </label>
+          </div>
+          <p class="text-sm text-gray-600 mt-2">
+            (หากเกี่ยวข้องกับรายละเอียด เช่น เกษตร, อาหาร, BCG ฯลฯ โปรดระบุในรายละเอียดโครงการ)
+          </p>
+        </div>
+
+        <div class="flex justify-between mt-6">
+          <button
+            type="button"
+            class="prev-step bg-gray-400 text-white px-6 py-3 rounded-lg hover:bg-gray-500 transition-all"
+          >
+            ย้อนกลับ
+          </button>
+          <button
+            type="button"
+            class="next-step bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all"
+          >
+            ถัดไป
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 4: จริยธรรม & ความสำคัญของปัญหาวิจัย & วัตถุประสงค์ -->
+      <div class="form-step hidden">
+        <h3 class="text-xl font-bold mb-4">4. จริยธรรม & ความสำคัญของปัญหาวิจัย</h3>
+
+        <!-- 5. ผู้รับทุนต้องผ่านการยื่นขอจริยธรรม (กรณีที่เกี่ยวข้อง) -->
+        <div class="mb-6">
+          <p class="text-lg font-semibold text-gray-800 mb-2">5. จริยธรรมที่เกี่ยวข้อง (ถ้ามี)</p>
+          <label class="inline-flex items-center mb-2">
+            <input type="radio" name="ethics" class="form-radio h-5 w-5 text-blue-600" value="ไม่เกี่ยวข้อง" />
+            <span class="ml-2 text-gray-700">ไม่เกี่ยวข้อง</span>
+          </label>
+          <br />
+          <label class="inline-flex items-center mb-2">
+            <input type="radio" name="ethics" class="form-radio h-5 w-5 text-blue-600" value="คน" />
+            <span class="ml-2 text-gray-700">จริยธรรมการวิจัยในคน</span>
+          </label>
+          <br />
+          <label class="inline-flex items-center mb-2">
+            <input type="radio" name="ethics" class="form-radio h-5 w-5 text-blue-600" value="สัตว์" />
+            <span class="ml-2 text-gray-700">จริยธรรมการวิจัยในสัตว์</span>
+          </label>
+          <br />
+          <label class="inline-flex items-center mb-2">
+            <input type="radio" name="ethics" class="form-radio h-5 w-5 text-blue-600" value="ความปลอดภัยชีวภาพ" />
+            <span class="ml-2 text-gray-700">ความปลอดภัยทางชีวภาพระดับสถาบัน</span>
+          </label>
+          <br />
+          <label class="inline-flex items-center mb-2">
+            <input type="radio" name="ethics" class="form-radio h-5 w-5 text-blue-600" value="อยู่ระหว่างการยื่นขอ" />
+            <span class="ml-2 text-gray-700">อยู่ระหว่างการยื่นขอ</span>
+          </label>
+          <div class="mt-2">
+            <input
+              type="text"
+              placeholder="เลขที่การรับรอง (ถ้ามี)"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+        <!-- 6. ความสำคัญและที่มาของปัญหาที่ทำการวิจัย -->
+        <div class="mb-4">
+          <label class="block text-gray-700 font-medium">6. ความสำคัญและที่มาของปัญหาที่ทำการวิจัย</label>
+          <textarea
+            rows="3"
+            placeholder="อธิบายความจำเป็นและความสำคัญของการวิจัย"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
+        <!-- 7. วัตถุประสงค์ -->
+        <div class="mb-4">
+          <label class="block text-gray-700 font-medium">7. วัตถุประสงค์</label>
+          <textarea
+            rows="3"
+            placeholder="อธิบายวัตถุประสงค์การวิจัย"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
+        <div class="flex justify-between mt-6">
+          <button
+            type="button"
+            class="prev-step bg-gray-400 text-white px-6 py-3 rounded-lg hover:bg-gray-500 transition-all"
+          >
+            ย้อนกลับ
+          </button>
+          <button
+            type="button"
+            class="next-step bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all"
+          >
+            ถัดไป
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 5: ทบทวนเอกสาร, ขั้นตอนการดำเนินงาน, ระยะเวลา -->
+      <div class="form-step hidden">
+        <h3 class="text-xl font-bold mb-4">5. ทบทวนเอกสาร & ขั้นตอนวิจัย</h3>
+
+        <!-- 8. ทบทวนเอกสารงานวิจัยที่เกี่ยวข้อง -->
+        <div class="mb-4">
+          <label class="block text-gray-700 font-medium">8. ทบทวนเอกสารงานวิจัยที่เกี่ยวข้อง</label>
+          <textarea
+            rows="3"
+            placeholder="ระบุความเชื่อมโยง พัฒนาการของงานวิจัยที่เกี่ยวข้อง"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
+        <!-- 9. ขั้นตอนการดำเนินงาน/ระเบียบวิธีวิจัย -->
+        <div class="mb-4">
+          <label class="block text-gray-700 font-medium">9. ขั้นตอนการดำเนินงาน/ระเบียบวิธีวิจัย</label>
+          <textarea
+            rows="4"
+            placeholder="อธิบายกิจกรรม ทดลอง ทดสอบ อย่างละเอียด"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
+        <!-- 10. ระยะเวลาการทำวิจัย และแผนการดำเนินงาน -->
+        <div class="mb-4">
+          <label class="block text-gray-700 font-medium">10. ระยะเวลาการทำวิจัย (ตั้งแต่...ถึง กันยายน 2568)</label>
+          <textarea
+            rows="2"
+            placeholder="ตัวอย่าง: ตั้งแต่ มกราคม 2568 ถึง กันยายน 2568"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-2"
+          ></textarea>
+          <label class="block text-gray-700 font-medium">แผนการดำเนินงาน (ตารางกิจกรรม)</label>
+          <textarea
+            rows="3"
+            placeholder="กิจกรรม / เดือน 1-12"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
+        <div class="flex justify-between mt-6">
+          <button
+            type="button"
+            class="prev-step bg-gray-400 text-white px-6 py-3 rounded-lg hover:bg-gray-500 transition-all"
+          >
+            ย้อนกลับ
+          </button>
+          <button
+            type="button"
+            class="next-step bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all"
+          >
+            ถัดไป
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 6: เป้าหมาย / ตัวชี้วัด + งบประมาณ + คำรับรอง -->
+      <div class="form-step hidden">
+        <h3 class="text-xl font-bold mb-4">6. เป้าหมาย / ตัวชี้วัด & งบประมาณ</h3>
+
+        <!-- 11. เป้าหมาย/ ตัวชี้วัดความสำเร็จของโครงการ -->
+        <div class="mb-4">
+          <label class="block text-gray-700 font-medium">
+            11. เป้าหมาย/ ตัวชี้วัดความสำเร็จของโครงการที่คาดว่าจะได้รับ
+          </label>
+          <p class="text-sm text-gray-600 mb-2">
+            ตัวอย่าง: ตีพิมพ์ในวารสารวิชาการระดับนานาชาติ (ISI, SCOPUS) ระบุชื่อวารสาร, ISSN, Impact Factor, Quartile
+          </p>
+          <textarea
+            rows="3"
+            placeholder="ชื่อวารสาร, ISSN, Impact Factor, ชื่อผลงานวิจัย ฯลฯ"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
+        <!-- 12. งบประมาณ -->
+        <div class="mb-4">
+          <label class="block text-gray-700 font-medium">12. งบประมาณ</label>
+          <textarea
+            rows="3"
+            placeholder="ระบุหมวดค่าตอบแทน, ค่าใช้สอย, ค่าวัสดุ, รวมงบประมาณ"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
+
+
+        <!-- ปุ่มส่งฟอร์ม -->
+        <div class="flex justify-between mt-6">
+          <button
+            type="button"
+            class="prev-step bg-gray-400 text-white px-6 py-3 rounded-lg hover:bg-gray-500 transition-all"
+          >
+            ย้อนกลับ
+          </button>
+          <button
+            type="submit"
+            class="bg-green-500 text-white px-2 py-4 rounded-lg hover:bg-green-600 transition-all "
+          >
+            ส่งแบบฟอร์ม
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- JavaScript: Multi-Step Logic -->
+  <script>
+    const steps = document.querySelectorAll('.form-step');
+    const progressBar = document.getElementById('progress-bar');
+    let currentStep = 0;
+
+    function showStep(step) {
+      steps.forEach((s, i) => {
+        s.classList.toggle('hidden', i !== step);
+      });
+      // คำนวณความกว้าง progress bar ตามจำนวน steps
+      progressBar.style.width = ((step + 1) / steps.length * 100) + '%';
+    }
+
+    document.querySelectorAll('.next-step').forEach(button => {
+      button.addEventListener('click', () => {
+        if (currentStep < steps.length - 1) {
+          currentStep++;
+          showStep(currentStep);
+        }
+      });
+    });
+
+    document.querySelectorAll('.prev-step').forEach(button => {
+      button.addEventListener('click', () => {
+        if (currentStep > 0) {
+          currentStep--;
+          showStep(currentStep);
+        }
+      });
+    });
+
+    // Initialize first step
+    showStep(currentStep);
+  </script>
+</body>
+</html>
