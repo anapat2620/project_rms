@@ -131,6 +131,20 @@ try {
                         class="file-input file-input-bordered w-full max-w-lg" />
                     <p class="error-message hidden" id="additional_file-error">กรุณาแนบเฉพาะไฟล์ PDF</p>
                 </div>
+                <div class="form-control w-full max-w-lg mb-4">
+                    <label class="label">
+                        <span class="label-text">ไฟล์หลักฐานการตีพิมพ์ (PDF)</span>
+                        <span class="label-text-alt">ถ้ามี</span>
+                    </label>
+                    <input type="file" name="publication_file" accept=".pdf" class="file-input file-input-bordered w-full max-w-lg" />
+                </div>
+                <div class="form-control w-full max-w-lg mb-4">
+                    <label class="label">
+                        <span class="label-text">ไฟล์หลักฐานการขอจริยธรรมวิจัยในมนุษย์ (PDF)</span>
+                        <span class="label-text-alt">ถ้ามี</span>
+                    </label>
+                    <input type="file" name="ethics_file" accept=".pdf" class="file-input file-input-bordered w-full max-w-lg" />
+                </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium mb-1" for="fund_support">ประเภททุนสนับสนุน <span class="text-red-500">*</span></label>
                     <select id="fund_support" name="fund_support" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>

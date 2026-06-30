@@ -45,7 +45,7 @@ window.initPersonnelMultiStep = function() {
         currentFormStep.querySelectorAll('.error-message').forEach(el => {
             el.classList.add('hidden');
         });
-        const requiredInputs = currentFormStep.querySelectorAll('input[required]:not([type="radio"]):not([type="checkbox"]), textarea[required]');
+        const requiredInputs = currentFormStep.querySelectorAll('input[required]:not([type="radio"]):not([type="checkbox"]), textarea[required], select[required]');
         requiredInputs.forEach(input => {
             if (input.type === 'file') {
                 if (!input.files || input.files.length === 0) {
@@ -58,6 +58,15 @@ window.initPersonnelMultiStep = function() {
                 } else if (input.accept === '.pdf' && input.files[0].type !== 'application/pdf') {
                     input.classList.add('border-red-500');
                     showErrorMessage(input.id, `กรุณาแนบเฉพาะไฟล์ PDF`);
+                    if (!firstInvalidElement) {
+                        firstInvalidElement = input;
+                    }
+                    isValid = false;
+                }
+            } else if (input.tagName.toLowerCase() === 'select') {
+                if (input.value.trim() === '') {
+                    input.classList.add('border-red-500');
+                    showErrorMessage(input.id, `กรุณาเลือกข้อมูลในช่องนี้`);
                     if (!firstInvalidElement) {
                         firstInvalidElement = input;
                     }

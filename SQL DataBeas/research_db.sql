@@ -232,6 +232,8 @@ CREATE TABLE `research_personnel` (
   `submission_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `proposal_file_path` varchar(255) DEFAULT NULL COMMENT 'ไฟล์เอกสารข้อเสนอโครงการวิจัย',
   `additional_file_path` varchar(255) DEFAULT NULL COMMENT 'ไฟล์เอกสารประกอบเพิ่มเติม',
+  `publication_file_path` varchar(255) DEFAULT NULL COMMENT 'ไฟล์หลักฐานการตีพิมพ์',
+  `ethics_file_path` varchar(255) DEFAULT NULL COMMENT 'ไฟล์หลักฐานจรรยาบรรณการวิจัย',
   `fund_support` varchar(50) DEFAULT NULL COMMENT 'ประเภททุนสนับสนุน (FunName)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -288,6 +290,8 @@ CREATE TABLE `research_proposals` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `proposal_file_path` varchar(255) DEFAULT NULL COMMENT 'ไฟล์เอกสารข้อเสนอโครงการวิจัย',
   `additional_file_path` varchar(255) DEFAULT NULL COMMENT 'ไฟล์เอกสารประกอบเพิ่มเติม',
+  `publication_file_path` varchar(255) DEFAULT NULL COMMENT 'ไฟล์หลักฐานการตีพิมพ์',
+  `ethics_file_path` varchar(255) DEFAULT NULL COMMENT 'ไฟล์หลักฐานจรรยาบรรณการวิจัย',
   `fund_support` varchar(50) DEFAULT NULL COMMENT 'ประเภททุนสนับสนุน (FunName)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -380,6 +384,8 @@ CREATE TABLE `research_teacher` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `proposal_file_path` varchar(255) DEFAULT NULL COMMENT 'ไฟล์เอกสารข้อเสนอโครงการวิจัย',
   `additional_file_path` varchar(255) DEFAULT NULL COMMENT 'ไฟล์เอกสารประกอบเพิ่มเติม',
+  `publication_file_path` varchar(255) DEFAULT NULL COMMENT 'ไฟล์หลักฐานการตีพิมพ์',
+  `ethics_file_path` varchar(255) DEFAULT NULL COMMENT 'ไฟล์หลักฐานจรรยาบรรณการวิจัย',
   `fund_support` varchar(50) DEFAULT NULL COMMENT 'ประเภททุนสนับสนุน (FunName)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

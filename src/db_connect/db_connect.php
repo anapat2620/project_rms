@@ -84,13 +84,40 @@ try {
 
     $proposalFilePath   = null;
     $additionalFilePath = null;
+    $publicationFilePath = null;
+    $ethicsFilePath = null;
+
+    $uploadPrefixMap = [
+        'teacher' => 'teacher-mbs',
+        'personnel' => 'personnel-mbp',
+    ];
+
+    if ($formType === 'student') {
+        $studentLevel = strtolower(trim($_POST['student_level'] ?? ''));
+        $studentLevelMap = [
+            'bachelor' => 'student-msb-bachelor',
+            'master'   => 'student-msb-master',
+            'phd'      => 'student-msb-phd',
+        ];
+        $uploadPrefix = $studentLevelMap[$studentLevel] ?? 'student-msb';
+    } else {
+        $uploadPrefix = $uploadPrefixMap[$formType] ?? null;
+    }
 
     if (isset($_FILES['proposal_file']) && $_FILES['proposal_file']['error'] === UPLOAD_ERR_OK) {
-        $proposalFilePath = handleFileUpload($_FILES['proposal_file'], $uploadDir);
+        $proposalFilePath = handleFileUpload($_FILES['proposal_file'], $uploadDir, ['pdf'], $uploadPrefix);
     }
 
     if (isset($_FILES['additional_file']) && $_FILES['additional_file']['error'] === UPLOAD_ERR_OK) {
-        $additionalFilePath = handleFileUpload($_FILES['additional_file'], $uploadDir);
+        $additionalFilePath = handleFileUpload($_FILES['additional_file'], $uploadDir, ['pdf'], $uploadPrefix);
+    }
+
+    if (isset($_FILES['publication_file']) && $_FILES['publication_file']['error'] === UPLOAD_ERR_OK) {
+        $publicationFilePath = handleFileUpload($_FILES['publication_file'], $uploadDir, ['pdf'], $uploadPrefix);
+    }
+
+    if (isset($_FILES['ethics_file']) && $_FILES['ethics_file']['error'] === UPLOAD_ERR_OK) {
+        $ethicsFilePath = handleFileUpload($_FILES['ethics_file'], $uploadDir, ['pdf'], $uploadPrefix);
     }
 
     // --- Branch by form type ---
@@ -114,7 +141,7 @@ try {
             rationale, objectives, importance, literature, conceptual_framework, hypothesis, methodology, references_link,
             research_start, research_end, research_schedule,
             success_indicators, publication_title, journal_name, requested_budget, budget_details,
-            proposal_file_path, additional_file_path, fund_support
+            proposal_file_path, additional_file_path, publication_file_path, ethics_file_path, fund_support
         ) VALUES (
             :project_th, :project_en,
             :student_firstname, :student_lastname, :student_level, :student_year, :student_id, :major, :faculty, :student_phone, :student_email,
@@ -123,7 +150,7 @@ try {
             :rationale, :objectives, :importance, :literature, :conceptual_framework, :hypothesis, :methodology, :references_link,
             :research_start, :research_end, :research_schedule,
             :success_indicators, :publication_title, :journal_name, :requested_budget, :budget_details,
-            :proposal_file_path, :additional_file_path, :fund_support
+            :proposal_file_path, :additional_file_path, :publication_file_path, :ethics_file_path, :fund_support
         )";
 
         $stmt = $pdo->prepare($sql);
@@ -168,6 +195,8 @@ try {
             ':budget_details'      => $_POST['budget_details'] ?? '',
             ':proposal_file_path'  => $proposalFilePath,
             ':additional_file_path'=> $additionalFilePath,
+            ':publication_file_path' => $publicationFilePath,
+            ':ethics_file_path'     => $ethicsFilePath,
             ':fund_support'        => $_POST['fund_support'] ?? '',
         ];
 
@@ -220,13 +249,13 @@ try {
             teacher_prefix_name, teacher_academic_position, teacher_department, teacher_faculty_unit, teacher_mobile_phone, teacher_email, teacher_research_proportion, teacher_expert_field,
             teacher_education_history, teacher_international_publications, co_researchers_details, student_co_researchers_details,
             research_type, msu_goals, ethics_related, ethics_certification_number, problem_significance, objectives, literature_review, methodology, research_period, operation_plan, expected_outcomes, budget_details,
-            proposal_file_path, additional_file_path, fund_support
+            proposal_file_path, additional_file_path, publication_file_path, ethics_file_path, fund_support
         ) VALUES (
             :project_thai_name, :project_english_name,
             :teacher_prefix_name, :teacher_academic_position, :teacher_department, :teacher_faculty_unit, :teacher_mobile_phone, :teacher_email, :teacher_research_proportion, :teacher_expert_field,
             :teacher_education_history, :teacher_international_publications, :co_researchers_details, :student_co_researchers_details,
             :research_type, :msu_goals, :ethics_related, :ethics_certification_number, :problem_significance, :objectives, :literature_review, :methodology, :research_period, :operation_plan, :expected_outcomes, :budget_details,
-            :proposal_file_path, :additional_file_path, :fund_support
+            :proposal_file_path, :additional_file_path, :publication_file_path, :ethics_file_path, :fund_support
         )";
 
         $stmt = $pdo->prepare($sql);
@@ -259,6 +288,8 @@ try {
             ':budget_details'                => $_POST['budget_details'] ?? '',
             ':proposal_file_path'            => $proposalFilePath,
             ':additional_file_path'          => $additionalFilePath,
+            ':publication_file_path'         => $publicationFilePath,
+            ':ethics_file_path'              => $ethicsFilePath,
             ':fund_support'                  => $_POST['fund_support'] ?? '',
         ];
 
@@ -312,14 +343,14 @@ try {
             msu_goals, research_type, learning_research, activities, research_field,
             problem_importance, objectives, literature_review, methodology, research_schedule,
             success_indicators, budget_details,
-            proposal_file_path, additional_file_path, fund_support
+            proposal_file_path, additional_file_path, publication_file_path, ethics_file_path, fund_support
         ) VALUES (
             :project_th, :project_en,
             :leader_firstname, :leader_lastname, :leader_position, :leader_department, :leader_phone, :leader_email, :leader_ratio, :co_researchers,
             :msu_goals, :research_type, :learning_research, :activities, :research_field,
             :problem_importance, :objectives, :literature_review, :methodology, :research_schedule,
             :success_indicators, :budget_details,
-            :proposal_file_path, :additional_file_path, :fund_support
+            :proposal_file_path, :additional_file_path, :publication_file_path, :ethics_file_path, :fund_support
         )";
 
         $stmt = $pdo->prepare($sql);
@@ -348,6 +379,8 @@ try {
             ':budget_details'       => $_POST['budget_details'] ?? '',
             ':proposal_file_path'   => $proposalFilePath,
             ':additional_file_path' => $additionalFilePath,
+            ':publication_file_path'=> $publicationFilePath,
+            ':ethics_file_path'     => $ethicsFilePath,
             ':fund_support'         => $_POST['fund_support'] ?? '',
         ];
 

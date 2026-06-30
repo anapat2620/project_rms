@@ -308,9 +308,11 @@ if (isset($_GET['view'])) {
         <div class="flex-1">
             <select id="funding-type" class="select select-bordered w-full max-w-xs bg-base-100 text-base-content">
                 <option value="" disabled selected>เลือกประเภททุน</option>
-                <option value="student.php">ทุนวิจัยของนิสิต</option>
+                <option value="student.php?level=bachelor">ทุนวิจัยของนิสิต (ปริญญาตรี)</option>
+                <option value="student.php?level=master">ทุนวิจัยของนิสิต (ปริญญาโท)</option>
+                <option value="student.php?level=phd">ทุนวิจัยของนิสิต (ปริญญาเอก)</option>
                 <option value="teacher.php">ทุนวิจัยของอาจารย์</option>
-                <option value="personnel.php">ทุนวิจัยเพื่อพัฒนาองค์กรและพัฒนาบุคลากร</option>
+                <option value="personnel.php">ทุนวิจัยของเจ้าหน้าที่</option>
             </select>
 
             <?php if ($canApprove): ?>

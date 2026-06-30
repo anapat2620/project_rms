@@ -83,37 +83,29 @@
     if (CHARTS.line) { CHARTS.line.destroy(); }
     var common = buildCommonOptions(colors);
     CHARTS.line = new Chart(canvas, {
-      type: 'line',
+      type: 'bar',
       data: {
-        labels: DATA.dayLabels || [],
-        datasets: [
-          {
-            label: 'ยื่นคำขอ',
-            data: DATA.submissions || [],
-            borderColor: colors.primary,
-            backgroundColor: colors.primary,
-            pointRadius: 2, hitRadius: 6, hoverRadius: 3,
-            fill: false, tension: 0.3,
-          },
-          {
-            label: 'มีการอนุมัติ/ปฏิเสธ',
-            data: DATA.decisions || [],
-            borderColor: colors.info,
-            backgroundColor: colors.info,
-            pointRadius: 2, hitRadius: 6, hoverRadius: 3,
-            fill: false, tension: 0.3,
-          },
-        ],
+        labels: DATA.applicantTypeLabels || [],
+        datasets: [{
+          label: 'จำนวนการยื่น',
+          data: DATA.applicantTypeCounts || [],
+          backgroundColor: (DATA.applicantTypeLabels || []).map(function(_, index) {
+            return [colors.primary, colors.success, colors.warning, colors.error, colors.info][index % 5];
+          }),
+          borderColor: colors.base,
+          borderWidth: 1,
+        }],
       },
       options: Object.assign({}, common, {
         scales: {
           x: {
-            ticks: { color: colors.base, maxRotation: 0, autoSkip: true },
-            grid:  { color: 'rgba(156,163,175,0.15)' },
+            ticks: { color: colors.base, maxRotation: 0, autoSkip: false },
+            grid: { display: false },
           },
           y: {
             ticks: { color: colors.base, precision: 0 },
-            grid:  { color: 'rgba(156,163,175,0.15)' },
+            grid: { color: 'rgba(156,163,175,0.15)' },
+            beginAtZero: true,
           },
         },
       }),

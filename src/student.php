@@ -15,6 +15,14 @@ if (!isset($_SESSION['Email']) || !isset($_SESSION['Position'])) {
     exit();
 }
 
+// รับพารามิเตอร์ระดับการศึกษาเพื่อให้เมนูสามารถแยกประเภททุนได้
+$allowedStudentLevels = ['bachelor' => 'ปริญญาตรี', 'master' => 'ปริญญาโท', 'phd' => 'ปริญญาเอก'];
+$selectedStudentLevel = $_GET['level'] ?? '';
+if (!array_key_exists($selectedStudentLevel, $allowedStudentLevels)) {
+    $selectedStudentLevel = '';
+}
+$selectedStudentLevelLabel = $selectedStudentLevel ? $allowedStudentLevels[$selectedStudentLevel] : '';
+
 // ดึงข้อมูล fund_support จากฐานข้อมูล
 $fund_support_options = [];
 try {
@@ -51,6 +59,9 @@ try {
         </h2>
         <p class="text-center text-gray-600 mb-4">
             ประเภททุนวิจัยนิสิต ประจำปีงบประมาณ พ.ศ. 2568
+            <?php if ($selectedStudentLevelLabel): ?>
+                <br>ประเภท: <?php echo htmlspecialchars($selectedStudentLevelLabel); ?>
+            <?php endif; ?>
         </p>
         <div class="flex items-center justify-between mb-6 text-sm md:text-base">
             <div class="step active text-blue-600 font-semibold text-center" aria-current="step">1. ข้อมูลทั่วไป</div>
@@ -96,6 +107,20 @@ try {
                     <input type="file" name="additional_file" accept=".pdf" class="file-input file-input-bordered w-full max-w-lg" />
                     <p class="error-message hidden" id="additional_file-error">กรุณาแนบเฉพาะไฟล์ PDF</p>
                 </div>
+                <div class="form-control w-full max-w-lg mb-4">
+                    <label class="label">
+                        <span class="label-text">ไฟล์หลักฐานการตีพิมพ์ (PDF)</span>
+                        <span class="label-text-alt">ถ้ามี</span>
+                    </label>
+                    <input type="file" name="publication_file" accept=".pdf" class="file-input file-input-bordered w-full max-w-lg" />
+                </div>
+                <div class="form-control w-full max-w-lg mb-4">
+                    <label class="label">
+                        <span class="label-text">ไฟล์หลักฐานการขอจริยธรรมวิจัยในมนุษย์ (PDF)</span>
+                        <span class="label-text-alt">ถ้ามี</span>
+                    </label>
+                    <input type="file" name="ethics_file" accept=".pdf" class="file-input file-input-bordered w-full max-w-lg" />
+                </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium mb-1" for="fund_support">ประเภททุนสนับสนุน <span class="text-red-500">*</span></label>
                     <select id="fund_support" name="fund_support" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
@@ -130,9 +155,9 @@ try {
                         <label class="block text-gray-700 font-medium mb-1" for="student_level">ระดับการศึกษา <span class="text-red-500">*</span></label>
                         <select id="student_level" name="student_level" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
                                 <option value="">เลือก</option>
-                                <option value="phd">ปริญญาเอก</option>
-                                <option value="master">ปริญญาโท</option>
-                                <option value="bachelor">ปริญญาตรี</option>
+                                <option value="phd"<?php echo $selectedStudentLevel === 'phd' ? ' selected' : ''; ?>>ปริญญาเอก</option>
+                                <option value="master"<?php echo $selectedStudentLevel === 'master' ? ' selected' : ''; ?>>ปริญญาโท</option>
+                                <option value="bachelor"<?php echo $selectedStudentLevel === 'bachelor' ? ' selected' : ''; ?>>ปริญญาตรี</option>
                             </select>
                         <p class="error-message hidden" id="student_level-error">กรุณาเลือกระดับการศึกษา</p>
                     </div>

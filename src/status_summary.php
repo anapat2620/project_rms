@@ -42,39 +42,48 @@ if ($counts_stmt) {
 // รวมจำนวนปฏิเสธและยกเลิก
 $rejected_cancelled = ($status_counts['ปฏิเสธ'] ?? 0) + ($status_counts['ยกเลิก'] ?? 0);
 
-// เตรียมข้อมูลสำหรับกราฟแบบ time-series
-$days = [];
-for ($i = 13; $i >= 0; $i--) {
-    $days[] = date('Y-m-d', strtotime("-{$i} days"));
-}
-
-$submissions_by_day = array_fill_keys($days, 0);
-$decisions_by_day = array_fill_keys($days, 0);
-
-$sql_submit_ts = "SELECT DATE(submission_date) AS d, COUNT(*) AS c FROM research_requests_status WHERE submission_date >= CURDATE() - INTERVAL 13 DAY GROUP BY DATE(submission_date)";
-$submit_ts_result = $conn->query($sql_submit_ts);
-if ($submit_ts_result) {
-    while ($row = $submit_ts_result->fetch_assoc()) {
-        $d = $row['d'];
-        if (isset($submissions_by_day[$d])) {
-            $submissions_by_day[$d] = (int)$row['c'];
-        }
+// สรุปจำนวนการยื่นคำขอตามประเภทผู้ยื่น
+$applicant_type_summary = [];
+$type_labels = [
+    'research_proposals' => 'นิสิต',
+    'research_teacher' => 'อาจารย์',
+    'research_personnel' => 'บุคลากร',
+];
+$applicant_type_sql = "SELECT original_table, COUNT(*) AS c FROM research_requests_status GROUP BY original_table";
+$applicant_type_result = $conn->query($applicant_type_sql);
+if ($applicant_type_result) {
+    while ($row = $applicant_type_result->fetch_assoc()) {
+        $original_table = $row['original_table'];
+        $label = $type_labels[$original_table] ?? $original_table;
+        $applicant_type_summary[$label] = (int)$row['c'];
     }
 }
 
-$sql_decide_ts = "SELECT DATE(action_date) AS d, COUNT(*) AS c FROM research_requests_status WHERE action_date IS NOT NULL AND action_date >= CURDATE() - INTERVAL 13 DAY GROUP BY DATE(action_date)";
-$decide_ts_result = $conn->query($sql_decide_ts);
-if ($decide_ts_result) {
-    while ($row = $decide_ts_result->fetch_assoc()) {
-        $d = $row['d'];
-        if (isset($decisions_by_day[$d])) {
-            $decisions_by_day[$d] = (int)$row['c'];
-        }
-    }
-}
+$applicantTypeLabels = array_keys($applicant_type_summary);
+$applicantTypeCounts = array_values($applicant_type_summary);
 
 // --- ข้อมูลการเบิกจ่ายทุน ---
 $current_fiscal_year = date('Y') + 543; // ปี พ.ศ. ปัจจุบัน
+if (isset($_GET['fiscal_year']) && ctype_digit($_GET['fiscal_year'])) {
+    $current_fiscal_year = intval($_GET['fiscal_year']);
+}
+
+$available_years = [];
+$years_sql = "SELECT fiscal_year FROM disbursement_summary UNION SELECT fiscal_year FROM disbursement_items ORDER BY fiscal_year DESC";
+$years_result = $conn->query($years_sql);
+if ($years_result) {
+    while ($row = $years_result->fetch_assoc()) {
+        $available_years[] = intval($row['fiscal_year']);
+    }
+}
+if (empty($available_years)) {
+    $available_years[] = $current_fiscal_year;
+}
+if (!in_array($current_fiscal_year, $available_years, true)) {
+    $available_years[] = $current_fiscal_year;
+    rsort($available_years);
+}
+
 $budget_amount = 25000000.00; // ค่าเริ่มต้น
 $disbursed_amount = 14500000.00; // ค่าเริ่มต้น
 
@@ -218,11 +227,37 @@ $conn->close();
                 <div class="rounded-2xl bg-base-100 border border-base-300 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
                     <div class="px-6 py-4 border-b border-base-200 bg-base-100/50">
                         <h2 class="text-lg font-semibold flex items-center gap-2">
-                            <span>📈</span> แนวโน้ม 14 วันย้อนหลัง
+                            <span>📈</span> จำนวนผู้ยื่นตามประเภทผู้ยื่น
                         </h2>
                     </div>
-                    <div class="p-4 md:p-6">
-                        <div class="chart-container relative h-[300px] w-full"><canvas id="trendLine"></canvas></div>
+                    <div class="p-6 scroll-area max-h-[350px] overflow-y-auto">
+                        <?php if (empty($applicant_type_summary)): ?>
+                            <div class="text-center py-8 text-base-content/40">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-3 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <p>ยังไม่มีข้อมูลการยื่นคำขอ</p>
+                            </div>
+                        <?php else: ?>
+                            <?php $total_applicant_type = array_sum($applicant_type_summary); ?>
+                            <div class="space-y-5">
+                                <?php foreach ($applicant_type_summary as $label => $count): ?>
+                                    <?php $percentage = $total_applicant_type > 0 ? round(($count / $total_applicant_type) * 100, 1) : 0; ?>
+                                    <div>
+                                        <div class="flex justify-between items-end mb-2">
+                                            <div>
+                                                <div class="font-medium text-base-content leading-tight"><?php echo htmlspecialchars($label); ?></div>
+                                                <div class="text-xs text-base-content/50 mt-1">ยื่นแล้ว <?php echo number_format($count); ?> ครั้ง</div>
+                                            </div>
+                                            <div class="text-sm font-bold text-base-content/80"><?php echo $percentage; ?>%</div>
+                                        </div>
+                                        <div class="w-full bg-base-200 rounded-full h-2 overflow-hidden">
+                                            <div class="bg-primary h-full rounded-full transition-all duration-700 ease-out" style="width: <?php echo $percentage; ?>%;"></div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -274,55 +309,25 @@ $conn->close();
                  </div>
 
                 <div class="rounded-2xl bg-base-100 border border-base-300 shadow-sm overflow-hidden">
-                    <div class="px-6 py-4 border-b border-base-200 bg-base-100/50 flex justify-between items-center">
+                    <div class="px-6 py-4 border-b border-base-200 bg-base-100/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <h2 class="text-lg font-semibold flex items-center gap-2">
-                            <span>💰</span> สรุปการเบิกจ่าย (ปี <?php echo $current_fiscal_year; ?>)
+                            <span>💰</span> สรุปการเบิกจ่าย
                         </h2>
+                        <form method="get" class="flex items-center gap-2">
+                            <select name="fiscal_year" class="select select-bordered select-sm bg-base-100">
+                                <?php foreach ($available_years as $year): ?>
+                                    <option value="<?php echo $year; ?>" <?php echo $year === $current_fiscal_year ? 'selected' : ''; ?>>ปี <?php echo $year; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <button type="submit" class="btn btn-primary btn-sm">ดูปี</button>
+                        </form>
                     </div>
                     
-                    <div class="p-6 md:p-8 flex flex-col sm:flex-row items-center gap-8 justify-center">
-                        
-                        <div class="flex-shrink-0 relative">
-                            <div class="radial-progress text-primary" style="--value:<?php echo $disbursement_percentage; ?>; --size:7.5rem; --thickness:0.8rem;">
-                                <span class="text-2xl font-bold text-base-content"><?php echo $disbursement_percentage; ?>%</span>
-                            </div>
-                        </div>
-
-                        <div class="w-full flex flex-col gap-3">
-                            <div class="flex items-center justify-between p-3 rounded-xl bg-base-200/50 border border-base-200">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-2 h-8 rounded bg-base-300"></div>
-                                    <span class="text-sm font-medium text-base-content/70">งบประมาณรวม</span>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-lg font-bold text-base-content"><?php echo number_format($budget_amount, 2); ?></div>
-                                    <div class="text-[10px] text-base-content/50 uppercase">บาท (THB)</div>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center justify-between p-3 rounded-xl bg-primary/5 border border-primary/10">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-2 h-8 rounded bg-primary"></div>
-                                    <span class="text-sm font-medium text-base-content/70">เบิกจ่ายแล้ว</span>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-lg font-bold text-primary"><?php echo number_format($disbursed_amount, 2); ?></div>
-                                    <div class="text-[10px] text-base-content/50 uppercase">บาท (THB)</div>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center justify-between p-3 rounded-xl bg-info/5 border border-info/10">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-2 h-8 rounded bg-info"></div>
-                                    <span class="text-sm font-medium text-base-content/70">ยอดคงเหลือ</span>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-lg font-bold text-info"><?php echo number_format($remaining_amount, 2); ?></div>
-                                    <div class="text-[10px] text-base-content/50 uppercase">บาท (THB)</div>
-                                </div>
-                            </div>
-                        </div>
-                        
+                    <div class="p-6 md:p-8 text-center">
+                        <div class="text-sm text-base-content/60 mb-2">ปีงบประมาณ</div>
+                        <div class="text-3xl font-bold text-base-content mb-4"><?php echo $current_fiscal_year; ?></div>
+                        <div class="text-sm text-base-content/60 mb-2">ยอดที่เบิกแล้ว</div>
+                        <div class="text-3xl font-bold text-primary"><?php echo number_format($disbursed_amount, 2); ?> บาท</div>
                     </div>
                 </div>
 
@@ -374,9 +379,8 @@ $conn->close();
     <script id="status-summary-data" type="application/json">
       <?php echo json_encode([
         'statusCounts' => $status_counts,
-        'dayLabels' => array_map(function($d){ return date('d/m', strtotime($d)); }, $days),
-        'submissions' => array_values($submissions_by_day),
-        'decisions' => array_values($decisions_by_day)
+        'applicantTypeLabels' => $applicantTypeLabels,
+        'applicantTypeCounts' => $applicantTypeCounts,
       ], JSON_UNESCAPED_UNICODE); ?>
     </script>
     <script src="assets/status_summary.js"></script>
