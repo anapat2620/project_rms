@@ -150,25 +150,37 @@ window.initStudentMultiStep = function() {
         }
         return isValid;
     }
-    document.querySelectorAll('.next-step').forEach(button => {
-        button.addEventListener('click', () => {
-            if (validateStep(currentStep)) {
+    const form = document.getElementById('multi-step-form');
+    form.addEventListener('click', (event) => {
+        const nextButton = event.target.closest('.next-step');
+        const prevButton = event.target.closest('.prev-step');
+
+        if (nextButton) {
+            event.preventDefault();
+            if (steps[currentStep]) {
                 steps[currentStep].classList.add('hidden');
-                currentStep++;
-                steps[currentStep].classList.remove('hidden');
-                updateProgressBar();
             }
-        });
-    });
-    document.querySelectorAll('.prev-step').forEach(button => {
-        button.addEventListener('click', () => {
-            steps[currentStep].classList.add('hidden');
-            currentStep--;
-            steps[currentStep].classList.remove('hidden');
+            currentStep++;
+            if (steps[currentStep]) {
+                steps[currentStep].classList.remove('hidden');
+            }
             updateProgressBar();
-        });
+            return;
+        }
+
+        if (prevButton) {
+            event.preventDefault();
+            if (steps[currentStep]) {
+                steps[currentStep].classList.add('hidden');
+            }
+            currentStep--;
+            if (steps[currentStep]) {
+                steps[currentStep].classList.remove('hidden');
+            }
+            updateProgressBar();
+        }
     });
-    document.getElementById('multi-step-form').addEventListener('submit', async function(event) {
+    form.addEventListener('submit', async function(event) {
         event.preventDefault();
         let allStepsValid = true;
         let errorMessages = [];

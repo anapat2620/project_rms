@@ -69,6 +69,63 @@ document.addEventListener('DOMContentLoaded', function() {
       return checks;
   };
 
+  function bindMultiStepFormNavigation() {
+      const form = document.querySelector('#form #multi-step-form');
+      if (!form || form.dataset.navBound === '1') return;
+      form.dataset.navBound = '1';
+
+      form.addEventListener('click', function(event) {
+          const nextButton = event.target.closest('.next-step');
+          const prevButton = event.target.closest('.prev-step');
+          if (!nextButton && !prevButton) return;
+
+          event.preventDefault();
+
+          const steps = Array.prototype.slice.call(form.querySelectorAll('.form-step'));
+          let currentStep = steps.findIndex(function(step) {
+              return !step.classList.contains('hidden');
+          });
+          if (currentStep < 0) currentStep = 0;
+
+          if (nextButton) {
+              if (steps[currentStep]) {
+                  steps[currentStep].classList.add('hidden');
+              }
+              currentStep += 1;
+              if (steps[currentStep]) {
+                  steps[currentStep].classList.remove('hidden');
+              }
+          } else if (prevButton) {
+              if (steps[currentStep]) {
+                  steps[currentStep].classList.add('hidden');
+              }
+              currentStep -= 1;
+              if (steps[currentStep]) {
+                  steps[currentStep].classList.remove('hidden');
+              }
+          }
+
+          const progressBar = document.getElementById('progress-bar');
+          if (progressBar && steps.length) {
+              const progress = ((currentStep + 1) / steps.length) * 100;
+              progressBar.style.width = `${progress}%`;
+          }
+
+          const progressSteps = document.querySelectorAll('.step');
+          progressSteps.forEach(function(step, index) {
+              if (index === currentStep) {
+                  step.classList.add('active', 'text-blue-600', 'font-semibold');
+                  step.classList.remove('text-gray-500');
+                  step.setAttribute('aria-current', 'step');
+              } else {
+                  step.classList.remove('active', 'text-blue-600', 'font-semibold');
+                  step.classList.add('text-gray-500');
+                  step.removeAttribute('aria-current');
+              }
+          });
+      });
+  }
+
   // **จุดที่แก้ไข: เพิ่ม `initialSearchQuery` parameter และ logic การจัดการการกรอง**
   window.loadForm = async function(fileName, initialSearchQuery = '') { 
       return measurePerformance(`Loading ${fileName}`, async () => {
@@ -92,8 +149,10 @@ document.addEventListener('DOMContentLoaded', function() {
                   throw new Error('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
               }
 
+              const normalizedFileName = (fileName || '').split('?')[0];
+
               // กำหนดว่าหน้านี้เป็นหน้าตารางที่สามารถกรองได้หรือไม่
-              const isTablePage = ['status.php', 'get_my_scholarships.php', 'approve_requests.php'].includes(fileName);
+              const isTablePage = ['status.php', 'get_my_scholarships.php', 'approve_requests.php'].includes(normalizedFileName);
               let fetchFileName = fileName;
 
               // หากเป็นหน้าตารางและมีคำค้นหาเริ่มต้น ให้ส่งไปที่ PHP ด้วย
@@ -125,9 +184,31 @@ document.addEventListener('DOMContentLoaded', function() {
                   injectedHtml = rawHtml;
               }
               formElement.innerHTML = injectedHtml;
+              bindMultiStepFormNavigation();
 
               // โหลด CSS/JS เฉพาะหน้าแบบ dynamic
-              await loadPageSpecificAssets(fileName);
+              await loadPageSpecificAssets(normalizedFileName);
+
+              // Force re-init หลัง inject HTML เพื่อให้ฟอร์มเช่น student/teacher/personnel bind event ถูกต้อง
+              if (normalizedFileName === 'student.php' && window.initStudentMultiStep && typeof window.initStudentMultiStep === 'function') {
+                  setTimeout(() => {
+                      if (document.querySelector('#form #multi-step-form')) {
+                          window.initStudentMultiStep();
+                      }
+                  }, 0);
+              } else if (normalizedFileName === 'teacher.php' && window.initTeacherMultiStep && typeof window.initTeacherMultiStep === 'function') {
+                  setTimeout(() => {
+                      if (document.querySelector('#form #multi-step-form')) {
+                          window.initTeacherMultiStep();
+                      }
+                  }, 0);
+              } else if (normalizedFileName === 'personnel.php' && window.initPersonnelMultiStep && typeof window.initPersonnelMultiStep === 'function') {
+                  setTimeout(() => {
+                      if (document.querySelector('#form #multi-step-form')) {
+                          window.initPersonnelMultiStep();
+                      }
+                  }, 0);
+              }
 
               // จัดการหน้าตาราง: ตั้งค่า search input และ event listener
               if (isTablePage) {
@@ -149,9 +230,9 @@ document.addEventListener('DOMContentLoaded', function() {
               }
 
               // จัดการหน้าเฉพาะ: home.php และ status_summary.php
-              if (fileName === 'home.php' && !window.Chart) {
+              if (normalizedFileName === 'home.php' && !window.Chart) {
                   await loadChartJS();
-              } else if (fileName === 'status_summary.php') {
+              } else if (normalizedFileName === 'status_summary.php') {
                   // ตรวจสอบและ retry ถ้าจำเป็น (รวม logic เดิมที่ซ้ำซ้อน)
                   const checkStatusSummary = () => {
                       const hasJson = !!document.getElementById('status-summary-data');
@@ -162,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   if (!checkStatusSummary() && !window.__SS_RETRY__) {
                       window.__SS_RETRY__ = true;
                       setTimeout(async () => {
-                          await loadPageSpecificAssets(fileName);
+                          await loadPageSpecificAssets(normalizedFileName);
                           setTimeout(() => {
                               if (!checkStatusSummary()) {
                                   loadForm(fileName).catch(err => console.error('Retry status_summary failed:', err));
@@ -187,6 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ฟังก์ชันโหลด CSS/JS เฉพาะหน้า
   // **จุดที่แก้ไข: เพิ่ม `init` function สำหรับหน้าตารางอื่นๆ**
   window.loadPageSpecificAssets = async function(fileName) {
+      const normalizedFileName = (fileName || '').split('?')[0];
       const assetMap = {
           'student.php': { css: 'assets/student.css', js: 'assets/student.js', init: 'initStudentMultiStep' },
           'teacher.php': { css: 'assets/teacher.css', js: 'assets/teacher.js', init: 'initTeacherMultiStep' },
@@ -198,8 +280,8 @@ document.addEventListener('DOMContentLoaded', function() {
           'status_summary.php': { css: 'assets/status_summary.css', js: 'assets/status_summary.js', init: 'initStatusSummary' }
       };
 
-      if (assetMap[fileName]) {
-          const assets = assetMap[fileName];
+      if (assetMap[normalizedFileName]) {
+          const assets = assetMap[normalizedFileName];
           
           if (assets.css) {
               const existingCss = document.querySelector(`link[href*='${assets.css.split('/').pop()}']`);
@@ -213,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
           
           if (assets.js) {
               // Ensure Chart.js for status_summary
-              if (fileName === 'status_summary.php' && !window.Chart) {
+              if (normalizedFileName === 'status_summary.php' && !window.Chart) {
                   await window.loadChartJS();
               }
               await loadScriptDynamic(assets.js, assets.init);
@@ -238,8 +320,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // เรียกฟังก์ชัน init หลังจาก script โหลดและรัน
       if (initFnName && window[initFnName] && typeof window[initFnName] === 'function') {
-          window[initFnName]();
-          console.log(`Called init function: ${initFnName}`);
+          const runInit = () => {
+              window[initFnName]();
+              console.log(`Called init function: ${initFnName}`);
+          };
+
+          if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', runInit, { once: true });
+          } else {
+              setTimeout(runInit, 0);
+          }
       } else if (initFnName) {
           console.warn(`Init function '${initFnName}' not found or not a function for script '${src}'.`);
       }
@@ -485,6 +575,11 @@ document.addEventListener('DOMContentLoaded', function() {
       fundingTypeSelect.addEventListener('change', function() {
           const selectedValue = this.value;
           if (selectedValue) {
+              const normalizedValue = selectedValue.split('?')[0];
+              if (['student.php', 'teacher.php', 'personnel.php'].includes(normalizedValue)) {
+                  window.location.href = `index.php?view=${encodeURIComponent(selectedValue)}`;
+                  return;
+              }
               loadForm(selectedValue).catch(error => {
                   console.error(`Error loading ${selectedValue}:`, error);
               });

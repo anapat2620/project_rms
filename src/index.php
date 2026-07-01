@@ -369,19 +369,36 @@ if (isset($_GET['view'])) {
     }
 
     function reExecuteScripts(container) {
-        var scripts = container.querySelectorAll('script');
-        scripts.forEach(function(oldScript) {
-            var newScript = document.createElement('script');
-            // คัดลอก attributes ทั้งหมด (เช่น src, type)
-            Array.from(oldScript.attributes).forEach(function(attr) {
-                newScript.setAttribute(attr.name, attr.value);
+        var scripts = Array.from(container.querySelectorAll('script'));
+
+        return scripts.reduce(function(promise, oldScript) {
+            return promise.then(function() {
+                var newScript = document.createElement('script');
+                // คัดลอก attributes ทั้งหมด (เช่น src, type)
+                Array.from(oldScript.attributes).forEach(function(attr) {
+                    newScript.setAttribute(attr.name, attr.value);
+                });
+
+                if (!oldScript.src) {
+                    // inline script — copy content และรันทันที
+                    newScript.textContent = oldScript.textContent;
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                    return Promise.resolve();
+                }
+
+                return new Promise(function(resolve, reject) {
+                    newScript.async = false;
+                    newScript.onload = function() {
+                        resolve();
+                    };
+                    newScript.onerror = function() {
+                        reject(new Error('Failed to load script: ' + newScript.src));
+                    };
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
             });
-            if (!oldScript.src) {
-                // inline script — copy content
-                newScript.textContent = oldScript.textContent;
-            }
-            newScript.async = false;
-            oldScript.parentNode.replaceChild(newScript, oldScript);
+        }, Promise.resolve()).catch(function(err) {
+            console.error('reExecuteScripts failed:', err);
         });
     }
 
@@ -397,7 +414,11 @@ if (isset($_GET['view'])) {
                 if (result && typeof result.then === 'function') {
                     return result.then(function(val) {
                         var f = document.getElementById('form');
-                        if (f) reExecuteScripts(f);
+                        if (f) {
+                            return reExecuteScripts(f).then(function() {
+                                return val;
+                            });
+                        }
                         return val;
                     });
                 }

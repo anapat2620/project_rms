@@ -517,7 +517,70 @@ try {
     </div>
     <script src="assets/student.js"></script>
     <script>
-      window.initStudentMultiStep && window.initStudentMultiStep();
+      (function () {
+        function initInlineStudentMultiStep() {
+          var form = document.getElementById('multi-step-form');
+          if (!form || form.dataset.inlineBound === '1') return;
+          form.dataset.inlineBound = '1';
+
+          form.addEventListener('click', function (event) {
+            var nextButton = event.target.closest('.next-step');
+            var prevButton = event.target.closest('.prev-step');
+            if (!nextButton && !prevButton) return;
+
+            event.preventDefault();
+
+            var steps = Array.prototype.slice.call(form.querySelectorAll('.form-step'));
+            var currentStep = steps.findIndex(function (step) {
+              return !step.classList.contains('hidden');
+            });
+            if (currentStep < 0) currentStep = 0;
+
+            if (nextButton) {
+              if (steps[currentStep]) {
+                steps[currentStep].classList.add('hidden');
+              }
+              currentStep += 1;
+              if (steps[currentStep]) {
+                steps[currentStep].classList.remove('hidden');
+              }
+            } else if (prevButton) {
+              if (steps[currentStep]) {
+                steps[currentStep].classList.add('hidden');
+              }
+              currentStep -= 1;
+              if (steps[currentStep]) {
+                steps[currentStep].classList.remove('hidden');
+              }
+            }
+
+            var progressBar = document.getElementById('progress-bar');
+            if (progressBar && steps.length) {
+              var progress = ((currentStep + 1) / steps.length) * 100;
+              progressBar.style.width = progress + '%';
+            }
+
+            var progressSteps = document.querySelectorAll('.step');
+            progressSteps.forEach(function (step, index) {
+              if (index === currentStep) {
+                step.classList.add('active', 'text-blue-600', 'font-semibold');
+                step.classList.remove('text-gray-500');
+                step.setAttribute('aria-current', 'step');
+              } else {
+                step.classList.remove('active', 'text-blue-600', 'font-semibold');
+                step.classList.add('text-gray-500');
+                step.removeAttribute('aria-current');
+              }
+            });
+          });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initInlineStudentMultiStep, { once: true });
+        } else {
+          initInlineStudentMultiStep();
+        }
+      })();
     </script>
     <!-- Toast Notification -->
     <?php if (!empty($_toast_message)): ?>
