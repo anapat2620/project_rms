@@ -431,8 +431,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // ฟังก์ชันสำหรับ filter ตาราง status (optimized)
   window.filterStatusTable = function() {
-      const searchTerm = this.value.toLowerCase().trim();
-      const table = formDiv?.querySelector('.table');
+      const searchTerm = (this.value || '').toLowerCase().trim();
+      const table = formDiv?.querySelector('table');
       
       if (!table) {
           console.warn('Table not found for filtering in current view (inside #form).');
@@ -445,11 +445,10 @@ document.addEventListener('DOMContentLoaded', function() {
       let visibleCount = 0;
       const searchLower = searchTerm.toLowerCase();
       
-      // ใช้ requestAnimationFrame เพื่อ optimize performance
       requestAnimationFrame(() => {
           rows.forEach(row => {
               const cells = row.querySelectorAll('td');
-              const textContent = Array.from(cells, td => (td.textContent || td.innerText).trim())
+              const textContent = Array.from(cells, td => (td.textContent || td.innerText || '').trim())
                                        .join(' ')
                                        .toLowerCase();
               
@@ -575,11 +574,6 @@ document.addEventListener('DOMContentLoaded', function() {
       fundingTypeSelect.addEventListener('change', function() {
           const selectedValue = this.value;
           if (selectedValue) {
-              const normalizedValue = selectedValue.split('?')[0];
-              if (['student.php', 'teacher.php', 'personnel.php'].includes(normalizedValue)) {
-                  window.location.href = `index.php?view=${encodeURIComponent(selectedValue)}`;
-                  return;
-              }
               loadForm(selectedValue).catch(error => {
                   console.error(`Error loading ${selectedValue}:`, error);
               });

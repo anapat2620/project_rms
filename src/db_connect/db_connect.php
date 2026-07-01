@@ -89,7 +89,7 @@ try {
 
     $uploadPrefixMap = [
         'teacher' => 'teacher-mbs',
-        'personnel' => 'personnel-mbp',
+        'personnel' => 'personnel-mbs',
     ];
 
     if ($formType === 'student') {
